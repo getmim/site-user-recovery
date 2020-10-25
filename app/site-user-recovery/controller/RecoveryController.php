@@ -120,6 +120,12 @@ class RecoveryController extends \Site\Controller
         if(!$recovery)
         	return $this->show404();
 
+        $expire = strtotime($recovery->expires);
+        if($expire < time()){
+            URecovery::remove(['id'=>$recovery->id]);
+            return $this->show404();
+        }
+
         $form = new Form('site.me.reset');
 
         $params = [
